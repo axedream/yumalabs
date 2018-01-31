@@ -47,9 +47,9 @@ class Model {
         if (is_array($array) && count($array)>0) {
             foreach ($array as $key => $value) {
                 if (empty($this->_where)) {
-                    $this->_where = $key." = ".$value;
+                    $this->_where = $key." = '".$value."'";
                 } else {
-                    $this->_where .= " AND ".$key." = ".$value;
+                    $this->_where .= " AND ".$key." = '".$value."'";
                 }
 
             }
@@ -61,39 +61,45 @@ class Model {
      */
     public function getAll($id = FALSE) {
         if ($this->sql_true) {
+            //если ID не пустой
             if (!empty($id)) {
+                //есди ID цифра
                 if (is_numeric($id)) {
                     $result = $this->db->getAll("SELECT * FROM " . $this->table . " WHERE id =" . $id);
-                    if ($result) {
+                //если ID не цифра
+                } else {
+                    //если ID массив
+                    if (is_array($id)) {
+                        //разворачиваем ID массив
+                        $this->where($id);
+                        //получаем результат
+                        $result = $this->db->getAll("SELECT * FROM " . $this->table . " WHERE ".$this->_where);
+                    //если ID текст
+                    } else {
+                        //если свободный запрос
+                        $result = $this->db->getAll("SELECT * FROM " . $this->table . " WHERE ".$id);
+                    }
+                }
+                //если не передан ID
+            } else {
+                if ( !empty($this->_where)) {
+                    $result = $this->db->getAll("SELECT * FROM " . $this->table . " WHERE ".$this->_where);
+                } else {
+                    $result = $this->db->getAll("SELECT * FROM " . $this->table);
+                }
+
+            }
+
+            if ($result) {
+                if (is_array($result)) {
+                    if (count($result)==1) {
                         foreach ($this->array_value as $value) {
                             $this->$value = $result[0][$value];
                         }
-                        return TRUE;
-                    }
-                } else {
-                    if (is_array($id)) {
-                        $this->where($id);
-                    }
-                    //если свободный запрос
-                    $result = $this->db->getAll($id);
-                    if ($result) {
-                        if (is_array($result)) {
-                            if (count($result)==1) {
-                                if ($result) {
-                                    foreach ($this->array_value as $value) {
-                                        $this->$value = $result[0][$value];
-                                    }
-                                    return TRUE;
-                                }
-                            } else {
-                                return $result;
-                            }
-                        }
                     }
                 }
-            } else {
-                $result = $this->db->getAll("SELECT * FROM " . $this->table . " WHERE ".$this->_where);
             }
+
             return $result;
         }
         return FALSE;

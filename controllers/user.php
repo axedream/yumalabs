@@ -63,9 +63,24 @@ class User {
         View::gi()->title = 'ПУ Юмалабс';
 
         if (!$this->auth_true) {
-            View::gi()->show('form_login',['text_message_wrong'=>"Вы вошли как Гость!<br> Для продолжения работы введите логин/пароль.",'size_message_wrong'=>3,'auth_true'=>$this->auth_true,'auth_login'=>$this->auth_login]);
+            View::gi()->show('form_login',[
+                'text_message_wrong'=>"Вы вошли как Гость!<br> Для продолжения работы введите логин/пароль.",
+                'size_message_wrong'=>3,
+                'auth_true'=>$this->auth_true,
+                'auth_login'=>$this->auth_login
+            ]);
         } else {
-            View::gi()->show('form_user',['user'=>['login'=>$_SESSION['user_login'],'fio'=>$_SESSION['user_fio'],'groupe'=>$_SESSION['user_groupe']]]);
+            $list_users = new UserModel();
+
+            View::gi()
+                ->show('form_user',[
+                    'user'=>[
+                        'login'=>$_SESSION['user_login'],
+                        'fio'=>$_SESSION['user_fio'],
+                        'groupe'=>$_SESSION['user_groupe'],
+                        'list'=>$list_users->getAll(),
+                    ]
+                ]);
         }
         //сбрасываем попытку авторизации
         $this->auth_login = 0;

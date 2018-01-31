@@ -104,7 +104,9 @@ class view extends Singleton {
                 //продумать что бы структура переменных не нарушалась
                 $$key = $value;
             }
+
         }
+
         if ((isset($filename) && $filename!='') && file_exists(LVIEW.$filename.'.php') ) {
                 if(!$show) {
                     require_once(LVIEW . $filename.'.php');
