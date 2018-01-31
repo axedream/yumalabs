@@ -53,12 +53,12 @@
                                             <td><?= $u['fio']?></td>
                                             <td><?= (new UserModel())->get_user_role($u['groupe'])?></td>
                                             <td>
-                                                <span class="glyphicon glyphicon-search" id="show" st="<?= $u['id']?>"></span>
+                                                <span class="glyphicon glyphicon-search bshow" st="<?= $u['id']?>" fio="<?= $u['fio']?>"></span>
 
                                                 <?php
                                                     if (($user['groupe'] == 10) OR ($u['login']==$user['login'])) {
                                                 ?>
-                                                    <span class="glyphicon glyphicon-pencil" id="edit" st="<?= $u['id']?>"></span>
+                                                    <span class="glyphicon glyphicon-pencil" id="edit" st="<?= $u['id']?>" fio="<?= $u['fio']?>"></span>
                                                 <?php
                                                     }
                                                 ?>
@@ -67,7 +67,7 @@
                                                     if (($user['groupe'] == 10) && ($user['login']!=$u['login']) && (!in_array($u['login'],['admin','guest']))) {
 
                                                 ?>
-                                                    <span class="glyphicon glyphicon-trash"  id="delete" st="<?= $u['id']?>"></span>
+                                                    <span class="glyphicon glyphicon-trash"  id="delete" st="<?= $u['id']?>" fio="<?= $u['fio']?>"></span>
                                                 <?php
                                                     }
                                                 ?>
@@ -97,3 +97,44 @@
 		</div>
 	</div>
 </div>
+
+
+<div id="form_dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="gridModalLabel">Заголовок модального окна</h4>
+            </div>
+            <div class="modal-body">
+                <!-- основное содержимое (тело) модального окна -->
+                <div class="container-fluid">
+                    <!-- Контейнер, в котором можно создавать классы системы сеток -->
+                    <div class="row">
+                        <div class="col-md-6">...</div>
+                        <div class="col-md-6">...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var user_id = 0;
+    var user_fio =0;
+    $(function(){
+        $(".bshow").on('click',function (e) {
+            user_id = $(this).attr('st');
+            user_fio = $(this).attr('fio');
+
+            $("#gridModalLabel").text('Просмотр пользователя: ' + user_fio);
+            $("#form_dialog").modal('show');
+            e.preventDefault();
+            return false;
+        });
+
+    });
+</script>
