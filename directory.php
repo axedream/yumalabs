@@ -4,7 +4,8 @@
 const CONF          =   'config/';              //файлы конфигураций
 const BASE          =   'base/';                //базовые функции, классы и т.п.
 const BCLASS        =   BASE.'class/';          //базовые классы
-const LCLASS        =   'class/';               //локальные классы
+const LCLASS        =   'controllers/';         //контроллеры
+const LMODELS       =   'models/';              //модели
 const BVIEW         =   BASE.'view/';           //базовые отображения
 const LVIEW         =   'view/';                //локальные отображеия
 const MODULES       =   'modules/';             //модули

@@ -12,11 +12,17 @@ class User {
     public $auth_true = 0; //по умолчанию авторизации нет = 0, если есть = 1
     public $auth_login = 0; //ключ попытки авторизации 0 не было попыток авторизации 1 была попытка авторизации
     public $db;
+    public $um_all;     //все пользователи
 
     final function __construct()
     {
         //создаем объект для работы с базой данных
-        $this->db = new safemysql(Core::gi()->config['mysqldb']['system']);
+        //$this->db = new safemysql(Core::gi()->config['mysqldb']['system']);
+
+        //создаем модель для работы с пользователями
+        $this->um_all = new UserModel();
+        $this->um_all->where(['status'=>'1']);
+        $result = $this->um_all->getAll();
 
         //если не установленна user_groupe назначаем по умолчанию гость (0 - гость 5 - пользователь  10 - суперадмин)
         if (!isset($_SESSION['user_groupe']) OR empty($_SESSION['user_groupe'])) {
@@ -27,8 +33,7 @@ class User {
 
         //получаем всех пользователей из базы (имена), для того что бы обойти вопросы инжекции
         if ($_SESSION['user_id'] && is_numeric($_SESSION['user_id'])) {
-        $sql  = "SELECT * FROM user WHERE status = 1"; //status = 1 акивный пользователь
-        $result = $this->db->getAll($sql);
+
             if ($result) {
                 foreach ($result as $users) {
                     if ($users['id']==$_SESSION['user_id']) {
@@ -99,16 +104,13 @@ class User {
         $this->index();
     }
 
-
-
     /**
      * Получение всех пользователей
      * получаем логин пароль
      */
     public function  getUsers($login = 0,$passwd = 0){
         if (!$this->auth_true) {
-            $sql  = "SELECT * FROM user WHERE status = 1"; //status = 1 акивный пользователь
-            $result = $this->db->getAll($sql);
+            $result = $this->um_all->getAll();
             if ($result) {
                 foreach ($result as $users) {
                     if (($users['login'] == $login) && ($login !='guest') && ($users['passwd'] == md5($passwd))) {
