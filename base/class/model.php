@@ -57,6 +57,37 @@ class Model {
     }
 
     /**
+     * Сохранение свойств объекта
+     */
+    public function update($array=[],$inj=[]){
+
+        if (count($array)>0) {
+            $this->where($array);
+        }
+
+        if ($this->sql_true) {
+            $query = '';
+            foreach ($this->array_value as $value) {
+                if (!in_array($value,$inj)) {
+                    if (empty($query)) {
+                        $query = " SET ".$value." = '".$this->$value."'";
+                    } else {
+                        $query .= " , ".$value." = '".$this->$value."'";
+                    }
+                }
+            }
+            if ($this->_where) {
+                $query .= " WHERE ".$this->_where;
+            }
+            $final_query = "UPDATE ".$this->table." ".$query;
+            file_put_contents("c:\\OpenServer\\domains\\hosting\\yml.txt","\nВыводимые данные:\n\n".print_r($final_query,TRUE), FILE_APPEND | LOCK_EX );
+            return ($this->db->query($final_query));
+        }
+        return FALSE;
+    }
+
+
+    /**
      * Получаем все данные из модели либо по ID
      */
     public function getAll($id = FALSE) {
@@ -64,7 +95,7 @@ class Model {
             //если ID не пустой
             if (!empty($id)) {
                 //есди ID цифра
-                if (is_numeric($id)) {
+                if (is_numeric((int)$id)) {
                     $result = $this->db->getAll("SELECT * FROM " . $this->table . " WHERE id =" . $id);
                 //если ID не цифра
                 } else {

@@ -16,7 +16,11 @@ return array(
                 "directory" =>  "buttons/logout.js",
             ],
             "basic" =>  [
-                "directory" =>  "basic/vars.js",
+                "directory" =>  [
+                    "basic/vars.js",
+                    "basic/ajax.js",
+                    ]
+
             ],
             /*
             "phpgrid"   =>  [
