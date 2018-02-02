@@ -57,6 +57,49 @@ class Model {
     }
 
     /**
+     * Добавляем запись
+     * @toDo продумать что бы автоматически выбирать на save добавление или обновление записи
+     * @return FALSE|resource
+     */
+    public function  insert() {
+        if ($this->sql_true) {
+            $query= 'INSERT INTO '.$this->table;
+
+            $key = '';
+            $val = '';
+            $i=0;
+
+            foreach ($this->array_value as $value) {
+                $i ++;
+                if (!empty($this->$value)) {
+
+                    if (empty($key)) {
+                        $key .= '('.$value;
+                    } else {
+                        $key .= ' ,'.$value;
+                    }
+
+
+                    if (empty($val)) {
+                        $val .=" VALUES ('".$this->$value."'";
+                    } else {
+                        $val .= ",'".$this->$value."'";
+                    }
+
+                    if (count($this->array_value) == $i) {
+                        $key .= ') ';
+                        $val .= ') ';
+                    }
+
+                } //ENDempty
+            } //ENDforeach
+            $query .= $key . $val;
+            return($this->db->query($query));
+            //file_put_contents("c:\\OpenServer\\domains\\hosting\\yml.txt","\nВыводимые данные:\n\n".print_r($query,TRUE), FILE_APPEND | LOCK_EX );
+        }
+    }
+
+    /**
      * Сохранение свойств объекта
      */
     public function update($array=[],$inj=[]){
@@ -130,8 +173,10 @@ class Model {
                     }
                 }
             }
+            if ($result) {
+                return $result;
+            }
 
-            return $result;
         }
         return FALSE;
     }

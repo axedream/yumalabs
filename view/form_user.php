@@ -125,6 +125,7 @@
                 <div class="row">
                     <div class="col-md-6" style="text-align: left;">
                         <button type="button" class="btn btn-default editButton" >Изменить</button>
+                        <button type="button" class="btn btn-default createButton" >Создать</button>
                     </div>
                     <div class="col-md-6">
                         <button type="button" class="btn btn-default right" data-dismiss="modal">Закрыть</button>
@@ -143,20 +144,38 @@
 
     function _before_send(){
         $(".editButton").hide();
+        $(".createButton").hide();
         $(".imgLoading").show();
         $("#gridModalLoadinText").html("<span class='center-block' style='text-align: center; color: orangered;'><h4>Подождите! Идет обработка запроса...</h4></span>")
         $("#gridModalBody").text("");
     }
     function _after_send(){
         $(".imgLoading").hide();
-        $("#gridModalLoadinText").text("")
+        $("#gridModalLoadinText").text("");
+        $('.selectpicker').selectpicker('render');
     }
 
+    function create_user_action(){
+        $(".createButton").on('click', function(){
+            if (!block_button_edit) {
+                block_button_edit = 1;
+                create_user({'login':$("#re_login").val() ,'fio':$("#re_fio").val(),'email':$("#re_email").val(),'passwd':$("#re_passwd").val(),'groupe':$("#re_groupe").val()});
+            }
+        });
+    }
 
+    function edit_user_action(){
+        $(".editButton").on('click', function(){
+            if (!block_button_edit) {
+                block_button_edit = 1;
+                set_user_info({'user_id':$("#re_user_id").val() ,'fio':$("#re_fio").val(),'email':$("#re_email").val(),'passwd':$("#re_passwd").val(),'groupe':$("#re_groupe").val()});
+            }
+        });
+    }
 
     function get_user_info(){
         $.ajax({
-            url: this_host+'ajax/get_data_user/',
+            url: this_host+'userAjax/get_data_user/',
             type: 'POST',
             dataType: 'JSON',
             data: {'input_data': {'user_id':user_id}},
@@ -178,20 +197,48 @@
         });
     }
 
-    function set_user_info(object){
+    function create_user_form(){
         $.ajax({
-            url: this_host+'ajax/edit_user/',
+            url: this_host+'userAjax/create_user_form/',
+            type: 'POST',
+            dataType: 'JSON',
+            cache: false,
+            success: function (msg){
+                if (!msg.error) {
+                    $("#gridModalBody").html(msg.msg.table);
+                } else {
+                    $("#gridModalBody").text("Не достаточно прав для совершения данной операции!");
+                }
+                $(".createButton").show();
+                create_user_action();
+                block_button_edit = 0;
+            },
+            beforeSend: function(){
+                _before_send();
+            },
+            complete: function(){
+                _after_send();
+            },
+        });
+    }
+
+    function create_user(object){
+        $.ajax({
+            url: this_host+'userAjax/create_user/',
             type: 'POST',
             dataType: 'JSON',
             data: {'input_data': object},
             cache: false,
             success: function (msg){
                 if (!msg.error) {
-                    $("#gridModalBody").html(msg.msg.text);
+                    $("#gridModalBody").html(msg.msg.table);
+                    /*перезагружаем страницу ибо дописывать ajax метод перезагрузки измененных данных нет времени*/
+                    if (msg.page_reload) {
+                        setTimeout(function() {window.location.reload();}, 1000);
+                    }
                 } else {
                     $("#gridModalBody").text("Не достаточно прав для совершения данной операции!");
                 }
-                console.log(msg);
             },
             beforeSend: function(){
                 _before_send();
@@ -204,20 +251,35 @@
     }
 
 
-    function edit_user_action(){
-        $(".editButton").on('click', function(){
-            if (!block_button_edit) {
-                block_button_edit = 1;
-                set_user_info({'user_id':$("#re_user_id").val() ,'fio':$("#re_fio").val(),'email':$("#re_email").val(),'passwd':$("#re_passwd").val(),'groupe':$("#re_groupe").val()});
-            }
-
+    function set_user_info(object){
+        $.ajax({
+            url: this_host+'userAjax/edit_user/',
+            type: 'POST',
+            dataType: 'JSON',
+            data: {'input_data': object},
+            cache: false,
+            success: function (msg){
+                if (!msg.error) {
+                    $("#gridModalBody").html(msg.msg.text);
+                    /*перезагружаем страницу ибо дописывать ajax метод перезагрузки измененных данных нет времени*/
+                    setTimeout(function() {window.location.reload();}, 1000);
+                } else {
+                    $("#gridModalBody").text("Не достаточно прав для совершения данной операции!");
+                }
+            },
+            beforeSend: function(){
+                _before_send();
+            },
+            complete: function(){
+                _after_send();
+                block_button_edit = 0;
+            },
         });
     }
 
-
     function edit_user_form(){
         $.ajax({
-            url: this_host+'ajax/edit_data_user_form/',
+            url: this_host+'userAjax/edit_data_user_form/',
             type: 'POST',
             dataType: 'JSON',
             data: {'input_data': {'user_id':user_id}},
@@ -230,7 +292,6 @@
                 }
                 $(".editButton").show();
                 edit_user_action();
-                console.log(msg);
             },
             beforeSend: function(){
                 _before_send();
@@ -241,10 +302,16 @@
         });
     }
 
-
-
     $(function(){
         $("#gridModalLoading").hide();
+
+        $("#create").on('click',function (e) {
+            create_user_form();
+            $("#gridModalLabel").text('Создать пользователя');
+            $("#form_dialog").modal('show');
+            e.preventDefault();
+            return false;
+        })
 
         $(".bedit").on('click',function (e) {
             user_id = $(this).attr('st');

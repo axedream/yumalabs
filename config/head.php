@@ -11,6 +11,13 @@ return array(
            "bootstrap"  =>  [
                "directory" => "bootstrap/js/bootstrap.min.js",
            ],
+            "bootstrap_select"  =>  [
+                "directory" => [
+                    "bootstrap/js/bootstrap-select.min.js",
+                    "bootstrap/js/defaults-ru_RU.min.js",
+                ],
+            ],
+
 
             "buttons"    =>  [
                 "directory" =>  "buttons/logout.js",
@@ -35,6 +42,9 @@ return array(
             "bootstrap" =>  [
                 "directory" =>  "bootstrap/css/bootstrap.min.css",
                 ],
+            "bootstrap_select" => [
+                "directory" =>  "bootstrap/css/bootstrap-select.min.css",
+            ],
                 /*
                 "phpgrid"   =>  [
                     "directory" =>  [
