@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="589fe474-04f8-4349-a0df-2002d4e64579" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/controllers/ajax.php" afterPath="$PROJECT_DIR$/controllers/userajax.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/base/class/model.php" afterPath="$PROJECT_DIR$/base/class/model.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/head.php" afterPath="$PROJECT_DIR$/config/head.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/view/form_user.php" afterPath="$PROJECT_DIR$/view/form_user.php" />
-    </list>
+    <list default="true" id="589fe474-04f8-4349-a0df-2002d4e64579" name="Default" comment="" />
     <ignored path="my.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -47,8 +41,8 @@
       <file leaf-file-name="userajax.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/controllers/userajax.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="327">
-              <caret line="288" column="77" lean-forward="true" selection-start-line="288" selection-start-column="77" selection-end-line="288" selection-end-column="77" />
+            <state relative-caret-position="565">
+              <caret line="278" column="30" lean-forward="false" selection-start-line="278" selection-start-column="30" selection-end-line="278" selection-end-column="30" />
               <folding>
                 <element signature="e#6#94#0#PHP" expanded="true" />
                 <marker date="1517554546103" expanded="true" signature="1879:2461" ph="..." />
@@ -480,12 +474,12 @@
       <workItem from="1517364819818" duration="21000" />
       <workItem from="1517364974199" duration="2000" />
       <workItem from="1517365884618" duration="23991000" />
-      <workItem from="1517462100850" duration="30938000" />
+      <workItem from="1517462100850" duration="30982000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="74388000" />
+    <option name="totallyTimeSpent" value="74432000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1096" extended-state="6" />
@@ -923,8 +917,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/controllers/userajax.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="327">
-          <caret line="288" column="77" lean-forward="true" selection-start-line="288" selection-start-column="77" selection-end-line="288" selection-end-column="77" />
+        <state relative-caret-position="565">
+          <caret line="278" column="30" lean-forward="false" selection-start-line="278" selection-start-column="30" selection-end-line="278" selection-end-column="30" />
           <folding>
             <element signature="e#6#94#0#PHP" expanded="true" />
             <marker date="1517554546103" expanded="true" signature="1879:2461" ph="..." />
