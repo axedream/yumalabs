@@ -297,6 +297,23 @@ class UserAjax extends Basic {
         }
     }
 
+    /**
+     * Удаляем пользователя
+     */
+    public function delete_user(){
+        $this->get_data();
+        if ($_SESSION['user_groupe']==10 && !empty($this->input_data['user_id'])) {
+            $user_delete = new UserModel();
+            $user_delete->id = (int)$this->input_data['user_id'];
+            if ($user_delete->delete()) {
+                $this->out['error'] =false;
+                $this->out['msg']['table'] = 'Запись успешно удалена';
+                $this->out['page_reload'] = true;
+            }
+        }
+        return FALSE;
+    }
+
 
     /**
      * Редактируем пользователя

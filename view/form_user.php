@@ -69,7 +69,7 @@
                                                     if (($user['groupe'] == 10) && ($user['login']!=$u['login']) && (!in_array($u['login'],['admin','guest']))) {
 
                                                 ?>
-                                                    <span class="glyphicon glyphicon-trash bdelete"  st="<?= $u['id']?>" fio="<?= $u['fio']?>"></span>
+                                                    <span class="glyphicon glyphicon-trash delete"  st="<?= $u['id']?>" fio="<?= $u['fio']?>"></span>
                                                 <?php
                                                     }
                                                 ?>
@@ -170,6 +170,32 @@
                 block_button_edit = 1;
                 set_user_info({'user_id':$("#re_user_id").val() ,'fio':$("#re_fio").val(),'email':$("#re_email").val(),'passwd':$("#re_passwd").val(),'groupe':$("#re_groupe").val()});
             }
+        });
+    }
+
+    function delete_user() {
+        $.ajax({
+            url: this_host+'userAjax/delete_user/',
+            type: 'POST',
+            dataType: 'JSON',
+            data: {'input_data': {'user_id':user_id}},
+            cache: false,
+            success: function (msg){
+                if (!msg.error) {
+                    $("#gridModalBody").html(msg.msg.table);
+                } else {
+                    $("#gridModalBody").text("Не достаточно прав для совершения данной операции!");
+                }
+                if (msg.page_reload) {
+                    setTimeout(function() {window.location.reload();}, 1000);
+                }
+            },
+            beforeSend: function(){
+                _before_send();
+            },
+            complete: function(){
+                _after_send();
+            },
         });
     }
 
@@ -303,7 +329,20 @@
     }
 
     $(function(){
+
         $("#gridModalLoading").hide();
+
+        $(".delete").on('click',function (e) {
+            if(confirm('Удаляем?')){
+                user_id = $(this).attr('st');
+                delete_user();
+                $("#gridModalLabel").text('Удалить пользователя');
+                $("#form_dialog").modal('show');
+                e.preventDefault();
+                return false;
+            }
+        })
+
 
         $("#create").on('click',function (e) {
             create_user_form();

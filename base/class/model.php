@@ -57,6 +57,39 @@ class Model {
     }
 
     /**
+     * Удаление записи по
+     * либо установленному свойству ID
+     * либо переданному в метод ID
+     * либо по WHERE
+     */
+    public function delete($id=0) {
+        if ($this->table) {
+
+            $query = "DELETE FROM ".$this->table." WHERE ";
+
+
+            if(isset($this->id)) {
+                if (!empty($this->id) && is_numeric($this->id)) {
+                    if (!empty($this->_where)) {
+                        $query .= $this->_where;
+                    } else {
+                        $query .= " id = '".$this->id."'";
+                    }
+                    return($this->db->query($query));
+                }
+            } else {
+                if (is_numeric($id) && $id) {
+                    $query .= " id = '".$id."'";
+                    return($this->db->query($query));
+                }
+            }
+
+        }
+        return FALSE;
+    }
+
+
+    /**
      * Добавляем запись
      * @toDo продумать что бы автоматически выбирать на save добавление или обновление записи
      * @return FALSE|resource
