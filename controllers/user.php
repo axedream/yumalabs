@@ -31,21 +31,27 @@ class User extends Basic {
         } else {
             $list_users = new UserModel();
             if ($_SESSION['sort']) {
+                $w=0;
+                if ($_SESSION['sort_desc_'.$_SESSION['sort']]) {
+                    if ($_SESSION['sort_desc_'.$_SESSION['sort']]==1) {
+                        $w = 1;
+                    }
+                }
                 switch ($_SESSION['sort']) {
 
                     /*соритируем по Логину*/
                     case 'login':
-                        $list_users->bsort('login');
+                        $list_users->bsort('login',$w);
                         break;
 
                     /*соритируем по ФИО*/
                     case 'fio':
-                        $list_users->bsort('fio');
+                        $list_users->bsort('fio',$w);
                         break;
 
                     /*соритируем по по доступам*/
                     case 'access':
-                        $list_users->bsort('groupe');
+                        $list_users->bsort('groupe',$w);
                         break;
                 }
             }

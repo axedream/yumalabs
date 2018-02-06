@@ -227,6 +227,7 @@ class UserAjax extends Basic {
         $this->get_data();
         if ($_SESSION['user_groupe']) {
             if ($this->input_data['groupe']) {
+
                 switch ($this->input_data['groupe']) {
                     /*соритируем по ФИО*/
                     case 'fio':
@@ -244,6 +245,20 @@ class UserAjax extends Basic {
                         $key_true = 1;
                         break;
                 }
+
+                //прямая, обратная - сортировки
+                if ($key_true) {
+                    if (isset($_SESSION['sort_desc_'.$_SESSION['sort']])) {
+                        if ($_SESSION['sort_desc_'.$_SESSION['sort']]) {
+                            $_SESSION['sort_desc_'.$_SESSION['sort']]=0;
+                        } else {
+                            $_SESSION['sort_desc_'.$_SESSION['sort']]=1;
+                        }
+                    } else {
+                        $_SESSION['sort_desc_'.$_SESSION['sort']]=1;
+                    }
+                }
+
             }
             if ($key_true) {
                 $this->out['error'] = false;

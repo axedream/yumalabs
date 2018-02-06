@@ -64,7 +64,7 @@ class Model {
     public function bsort($type,$w = 0){
         if ($type) {
             if ($w) {
-                $w = 'DESC';
+                $w = ' DESC ';
             }  else {
                 $w = '';
             }
