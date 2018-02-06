@@ -1,3 +1,7 @@
+<style type="text/css">
+    th:hover { cursor: default; }
+</style>
+
 <div class="container-fluid vertical-center" style="padding-top: 10px;" >
 	<div class="row">
 		<div class="col-md-12">
@@ -39,9 +43,9 @@
                         <div class="panel-body">
                             <table class="table">
                                 <tr>
-                                    <th>Логин</th>
-                                    <th>ФИО</th>
-                                    <th>Роль</th>
+                                    <th class="sort" groupe="login">Логин</th>
+                                    <th class="sort" groupe="fio">ФИО</th>
+                                    <th class="sort" groupe="access">Роль</th>
                                     <th>Действие</th>
                                 </tr>
                                 <?php
@@ -53,7 +57,7 @@
                                             <td><?= $u['fio']?></td>
                                             <td><?= (new UserModel())->get_user_role($u['groupe'])?></td>
                                             <td>
-                                                <span class="glyphicon glyphicon-search bshow" st="<?= $u['id']?>" fio="<?= $u['fio']?>"></span>
+                                                <span class="glyphicon glyphicon-search bshow" st="<?= $u['id']?>" fio="<?= $u['fio']?> "></span>
 
                                                 <?php
                                                     if (($user['groupe'] == 10) OR ($u['login']==$user['login'])) {
@@ -303,6 +307,32 @@
         });
     }
 
+    function user_sort(groupe){
+        $.ajax({
+            url: this_host+'userAjax/user_sort/',
+            type: 'POST',
+            dataType: 'JSON',
+            data: {'input_data': {'groupe':groupe}},
+            cache: false,
+            success: function (msg){
+                if (!msg.error) {
+                    $("#gridModalBody").html(msg.msg.table);
+                } else {
+                    $("#gridModalBody").text("Не достаточно прав для совершения данной операции!");
+                }
+                if (msg.page_reload) {
+                    setTimeout(function() {window.location.reload();}, 1000);
+                }
+            },
+            beforeSend: function(){
+                _before_send();
+            },
+            complete: function(){
+                _after_send();
+            },
+        });
+    }
+
     function edit_user_form(){
         $.ajax({
             url: this_host+'userAjax/edit_data_user_form/',
@@ -342,6 +372,15 @@
                 return false;
             }
         })
+
+        $(".sort").on('click',function(){
+            user_sort($(this).attr('groupe'));
+            $("#gridModalLabel").text('Сортировка пользователей');
+            $("#form_dialog").modal('show');
+            e.preventDefault();
+            return false;
+
+        });
 
 
         $("#create").on('click',function (e) {

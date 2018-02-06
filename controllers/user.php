@@ -30,7 +30,25 @@ class User extends Basic {
             ]);
         } else {
             $list_users = new UserModel();
+            if ($_SESSION['sort']) {
+                switch ($_SESSION['sort']) {
 
+                    /*соритируем по Логину*/
+                    case 'login':
+                        $list_users->bsort('login');
+                        break;
+
+                    /*соритируем по ФИО*/
+                    case 'fio':
+                        $list_users->bsort('fio');
+                        break;
+
+                    /*соритируем по по доступам*/
+                    case 'access':
+                        $list_users->bsort('groupe');
+                        break;
+                }
+            }
             View::gi()
                 ->show('form_user',[
                     'user'=>[
@@ -83,7 +101,9 @@ class User extends Basic {
      * получаем логин пароль
      */
     public function  getUsers($login = 0,$passwd = 0){
+
         if (!$this->auth_true) {
+
             $result = $this->um_all->getAll();
             if ($result) {
                 foreach ($result as $users) {

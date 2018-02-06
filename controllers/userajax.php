@@ -220,6 +220,42 @@ class UserAjax extends Basic {
     }
 
     /**
+     * Сортируем пользователей по одному из параметов
+     */
+    public function user_sort(){
+        $key_true = 0;
+        $this->get_data();
+        if ($_SESSION['user_groupe']) {
+            if ($this->input_data['groupe']) {
+                switch ($this->input_data['groupe']) {
+                    /*соритируем по ФИО*/
+                    case 'fio':
+                        $_SESSION['sort'] = 'fio';
+                        $key_true = 1;
+                        break;
+                    /*соритируем по Логину*/
+                    case 'login':
+                        $_SESSION['sort'] = 'login';
+                        $key_true = 1;
+                        break;
+                    /*соритируем по по доступам*/
+                    case 'access':
+                        $_SESSION['sort'] = 'access';
+                        $key_true = 1;
+                        break;
+                }
+            }
+            if ($key_true) {
+                $this->out['error'] = false;
+                $this->out['msg']['table'] = 'Сортировка произведена';
+                $this->out['page_reload'] = true;
+            }
+        }
+        return FALSE;
+    }
+
+
+    /**
      * Создаем пользователя
      */
     public function create_user(){

@@ -10,6 +10,7 @@ class Model {
     public $db;     //объект базы данных
     public $table;  //наименование наблицы
     public $_where; //условие
+    public $_order=''; //сортировка
     private $sql_true = 0; //наличие таблицы успешно выполненный запрос по получению полей таблицы 1
     public $array_value = [];
 
@@ -55,6 +56,22 @@ class Model {
             }
         }
     }
+
+    /**
+     * Сортировка
+     * toDo делать проверку входящего параметра
+     */
+    public function bsort($type,$w = 0){
+        if ($type) {
+            if ($w) {
+                $w = 'DESC';
+            }  else {
+                $w = '';
+            }
+            $this->_order = " ORDER BY " .$type . $w;
+        }
+    }
+
 
     /**
      * Удаление записи по
@@ -172,7 +189,7 @@ class Model {
             if (!empty($id)) {
                 //есди ID цифра
                 if (is_numeric((int)$id)) {
-                    $result = $this->db->getAll("SELECT * FROM " . $this->table . " WHERE id =" . $id);
+                    $result = $this->db->getAll("SELECT * FROM " . $this->table . " WHERE id =" . $id . $this->_order );
                 //если ID не цифра
                 } else {
                     //если ID массив
@@ -180,19 +197,19 @@ class Model {
                         //разворачиваем ID массив
                         $this->where($id);
                         //получаем результат
-                        $result = $this->db->getAll("SELECT * FROM " . $this->table . " WHERE ".$this->_where);
+                        $result = $this->db->getAll("SELECT * FROM " . $this->table . " WHERE ".$this->_where . $this->_order);
                     //если ID текст
                     } else {
                         //если свободный запрос
-                        $result = $this->db->getAll("SELECT * FROM " . $this->table . " WHERE ".$id);
+                        $result = $this->db->getAll("SELECT * FROM " . $this->table . " WHERE ".$id . $this->_order);
                     }
                 }
                 //если не передан ID
             } else {
                 if ( !empty($this->_where)) {
-                    $result = $this->db->getAll("SELECT * FROM " . $this->table . " WHERE ".$this->_where);
+                    $result = $this->db->getAll("SELECT * FROM " . $this->table . " WHERE ".$this->_where . $this->_order);
                 } else {
-                    $result = $this->db->getAll("SELECT * FROM " . $this->table);
+                    $result = $this->db->getAll("SELECT * FROM " . $this->table . $this->_order);
                 }
 
             }
